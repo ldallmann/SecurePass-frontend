@@ -10,10 +10,9 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 
-const navigate = useNavigate();
-
-
 const LoginRegisterForm = () => {
+    const navigate = useNavigate();
+
     const [isRegister, setIsRegister] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
