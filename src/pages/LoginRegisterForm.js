@@ -37,7 +37,7 @@ const LoginRegisterForm = () => {
             }
 
             try {
-                const response = await axios.post('http://localhost:8800/registerUser/', {
+                const response = await axios.post('https://securepass-api-6arh.onrender.com/registerUser/', {
                     name,
                     email: email.toLowerCase(),
                     password
@@ -49,7 +49,7 @@ const LoginRegisterForm = () => {
             }
         } else {
             try {
-                const response = await axios.post('http://localhost:8800/loginUser/', {
+                const response = await axios.post('https://securepass-api-6arh.onrender.com/loginUser/', {
                     email: email.toLowerCase(),
                     password
                 });

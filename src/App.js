@@ -29,12 +29,12 @@ function App() {
 
   const fetchInitialData = async () => {
     const endpoints = [
-      { url: "http://localhost:8800/user/", setter: setUsers },
-      { url: "http://localhost:8800/userHome/", setter: setUsersHome },
-      { url: "http://localhost:8800/door/", setter: setDoors },
-      { url: "http://localhost:8800/access/", setter: setAccess },
-      { url: "http://localhost:8800/accessTest/", setter: setAccessTest },
-      { url: "http://localhost:8800/permission/", setter: setPermission },
+      { url: "https://securepass-api-6arh.onrender.com/user/", setter: setUsers },
+      { url: "https://securepass-api-6arh.onrender.com/userHome/", setter: setUsersHome },
+      { url: "https://securepass-api-6arh.onrender.com/door/", setter: setDoors },
+      { url: "https://securepass-api-6arh.onrender.com/access/", setter: setAccess },
+      { url: "https://securepass-api-6arh.onrender.com/accessTest/", setter: setAccessTest },
+      { url: "https://securepass-api-6arh.onrender.com/permission/", setter: setPermission },
     ];
 
     try {
@@ -53,9 +53,9 @@ function App() {
   const fetchData = useCallback(async (userID) => {
     try {
       const [userInfoRes, accessLogRes, permissionsUserRes] = await Promise.all([
-        axios.get(`http://localhost:8800/userInfo/${userID}`),
-        axios.get(`http://localhost:8800/accessLog/${userID}`),
-        axios.get(`http://localhost:8800/permissionUser/${userID}`),
+        axios.get(`https://securepass-api-6arh.onrender.com/userInfo/${userID}`),
+        axios.get(`https://securepass-api-6arh.onrender.com/accessLog/${userID}`),
+        axios.get(`https://securepass-api-6arh.onrender.com/permissionUser/${userID}`),
       ]);
 
       setUserInfo(userInfoRes.data);

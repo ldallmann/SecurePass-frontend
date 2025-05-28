@@ -61,7 +61,7 @@ function UserModal({ isOpen, setModalOpen, permission, reloadUsersHome }) {
         if (!validateForm()) return;
 
         try {
-            const res = await axios.post("http://localhost:8800/user/", formData);
+            const res = await axios.post("https://securepass-api-6arh.onrender.com/user/", formData);
             toast.success(res.data);
             reloadUsersHome();
             resetForm();

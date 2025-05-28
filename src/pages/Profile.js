@@ -50,7 +50,7 @@ function Profile({ permission, permissionUser, accessLog, userInfo, reloadUsersH
         }
 
         try {
-            await axios.put(`http://localhost:8800/user/${userID}`, {
+            await axios.put(`https://securepass-api-6arh.onrender.com/user/${userID}`, {
                 Nome_Usuario: nome,
                 Email: email,
                 Status: isActive ? 'A' : 'I',
