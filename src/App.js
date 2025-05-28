@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import Access from './pages/Access';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
@@ -22,9 +22,12 @@ function App() {
   const [permissionUser, setPermissionUser] = useState([]);
   const [accessLog, setAccessLog] = useState([]);
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem('token');
-    window.location.href = '/';
+    toast.info("Sessão expirada, faça login novamente.");
+    navigate('/');
   };
 
   const fetchInitialData = async () => {
@@ -71,36 +74,49 @@ function App() {
     fetchInitialData();
   }, []);
 
-  return (
-    <Router>
-      <IdleTimeoutWrapper handleLogout={handleLogout}>
-        <Routes>
-          <Route path="/" element={<LoginRegisterForm />} />
-          <Route path="/home" element={<ProtectedRoute><Home usersHome={usersHome} permission={permission} accessTest={accessTest} reloadUsersHome={fetchInitialData} /></ProtectedRoute>} />
-          <Route path="/access" element={<ProtectedRoute><Access users={users} accessTest={accessTest} doors={doors} reloadAccess={fetchInitialData} /></ProtectedRoute>} />
-          <Route path="/profile/:userID" element={
-            <ProtectedRoute>
-              <UserProfileWrapper
-                permission={permission}
-                accessLog={accessLog}
-                userInfo={userInfo}
-                permissionUser={permissionUser}
-                fetchData={fetchData}
-                reloadUsersHome={fetchInitialData}
-                setUserInfo={setUserInfo}
-              />
-            </ProtectedRoute>
-          } />
-        </Routes>
-      </IdleTimeoutWrapper>
-      <ToastContainer />
-    </Router>
-  );
-}
-
-function IdleTimeoutWrapper({ children, handleLogout }) {
   useIdleTimeout(1000000, handleLogout);
-  return children;
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<LoginRegisterForm />} />
+        <Route path="/home" element={
+          <ProtectedRoute>
+            <Home 
+              usersHome={usersHome} 
+              permission={permission} 
+              accessTest={accessTest} 
+              reloadUsersHome={fetchInitialData} 
+            />
+          </ProtectedRoute>
+        } />
+        <Route path="/access" element={
+          <ProtectedRoute>
+            <Access 
+              users={users} 
+              accessTest={accessTest} 
+              doors={doors} 
+              reloadAccess={fetchInitialData} 
+            />
+          </ProtectedRoute>
+        } />
+        <Route path="/profile/:userID" element={
+          <ProtectedRoute>
+            <UserProfileWrapper
+              permission={permission}
+              accessLog={accessLog}
+              userInfo={userInfo}
+              permissionUser={permissionUser}
+              fetchData={fetchData}
+              reloadUsersHome={fetchInitialData}
+              setUserInfo={setUserInfo}
+            />
+          </ProtectedRoute>
+        } />
+      </Routes>
+      <ToastContainer />
+    </>
+  );
 }
 
 function UserProfileWrapper({ permission, accessLog, userInfo, permissionUser, fetchData, setUserInfo, reloadUsersHome }) {
@@ -114,17 +130,11 @@ function UserProfileWrapper({ permission, accessLog, userInfo, permissionUser, f
       await fetchData(userID);
       setLoading(false);
     };
-
     fetchUserProfileData();
-  }, [userID, fetchData]);
+  }, [userID, fetchData, setUserInfo]);
 
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
-
-  if (!userInfo) {
-    return <div>Usuário não encontrado.</div>;
-  }
+  if (loading) return <div>Carregando...</div>;
+  if (!userInfo) return <div>Usuário não encontrado.</div>;
 
   return (
     <Profile

@@ -8,6 +8,10 @@ import TopShield from '../assets/topShield.svg';
 import BottomShield from '../assets/bottomShield.svg';
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate();
+
 
 const LoginRegisterForm = () => {
     const [isRegister, setIsRegister] = useState(false);
@@ -57,7 +61,7 @@ const LoginRegisterForm = () => {
                     localStorage.setItem('token', response.data.token);
                     toast.success('Login realizado com sucesso!');
                     setTimeout(() => {
-                        window.location.href = '/home';
+                        navigate('/home');
                     }, 1000);
                 } else {
                     toast.error('Email ou senha inválidos');
