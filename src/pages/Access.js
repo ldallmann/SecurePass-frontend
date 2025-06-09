@@ -50,7 +50,7 @@ function Access({ users = [], doors = [], accessTest = [], reloadAccess }) {
                 Porta_ID_Porta: accessData.Porta_ID_Porta
             };
 
-            const res = await axios.post("http://localhost:8800/access", payload);
+            const res = await axios.post("https://securepass-api-6arh.onrender.com/access", payload);
             toast.success(res.data);
 
             reloadAccess();
