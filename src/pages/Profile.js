@@ -6,6 +6,7 @@ import AddPermissionModal from "../components/AddPermissionModal";
 import { toast } from "react-toastify";
 import { useParams } from 'react-router-dom';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
 
 function Profile({ permission, permissionUser, accessLog, userInfo, reloadUsersHome }) {
     const [showFirstTable, setShowFirstTable] = useState(true);
@@ -16,6 +17,8 @@ function Profile({ permission, permissionUser, accessLog, userInfo, reloadUsersH
     const [cargo, setCargo] = useState("");
     const { userID } = useParams();
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (userInfo) {
             setNome(userInfo.Nome_Usuario || "");
@@ -24,6 +27,24 @@ function Profile({ permission, permissionUser, accessLog, userInfo, reloadUsersH
             setCargo(userInfo.Permissoes_ID_Permissoes || "");
         }
     }, [userInfo]);
+
+    const handleDeleteUser = async () => {
+        if (!window.confirm("Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.")) {
+            return;
+        }
+
+        try {
+            await axios.delete(`https://securepass-api-6arh.onrender.com/user/${userID}`);
+            toast.success("Usuário excluído com sucesso!");
+            if (reloadUsersHome) {
+                reloadUsersHome();
+            }
+            navigate('/home');
+        } catch (error) {
+            console.error("Erro ao excluir usuário:", error);
+            toast.error("Erro ao excluir usuário." + error);
+        }
+    };
 
     const validateForm = () => {
         if (!nome.trim()) {
@@ -119,6 +140,9 @@ function Profile({ permission, permissionUser, accessLog, userInfo, reloadUsersH
                                 </select>
 
                                 <button type="submit" onClick={handleSave}>Salvar</button>
+                                <button type="button" onClick={handleDeleteUser} style={{ backgroundColor: 'red' }}>
+                                    Excluir Usuário
+                                </button>
                             </div>
 
                             <div>
